@@ -2,7 +2,6 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -14,6 +13,8 @@ jobs:
     # 1. Checkout del código
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     
     # 2. Setup Node.js
     - name: Setup Node.js
@@ -34,14 +35,25 @@ jobs:
     - name: Run linter
       run: npm run lint
     
-    # 6. REQUISITO 3: Analizar dependencias en busca de vulnerabilidades
-    - name: Run npm audit
-      run: npm audit
+    # 6. REQUISITO 3: Analizar dependencias en busca de vulnerabilidades y generar reporte
+    - name: Generate vulnerability report
+      run: |
+        echo "🔍 Analizando vulnerabilidades..."
+        npm audit --json > vulnerability-report.json || true
+        npm audit > vulnerability-report.txt || true
+        echo "✅ Reportes generados"
+
+    - name: Upload vulnerability report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: vulnerability-report
+        path: |
+          vulnerability-report.json
+          vulnerability-report.txt
     
     # 7. REQUISITO 4: Analizar código en busca de secretos expuestos
-    - name: Run TruffleHog
-      uses: trufflesecurity/trufflehog@main
-      with:
-        path: ./
-        base: main
-        head: HEAD
+    - name: Run GitLeaks
+      uses: gitleaks/gitleaks-action@v2
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

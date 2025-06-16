@@ -16,9 +16,12 @@ describe('GET /secure-data', () => {
   });
 
   it('debe permitir con API key válida', async () => {
+    //  Usar la variable de entorno o valor por defecto
+    const validKey = process.env.API_KEY || 'default-dev-key';
+    
     const res = await request(app)
       .get('/secure-data')
-      .set('x-api-key', 'ghp_a1b2c3d4e5f6g7h8i9j0klmnopqrstuvwx12');
+      .set('x-api-key', validKey);
     expect(res.statusCode).toBe(200);
     expect(res.body.secret).toBe('12345');
   });
