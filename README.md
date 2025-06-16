@@ -61,4 +61,4 @@ mismas
 2. Generar un PR/MR corrigiendo al menos uno de los errores y verificar el
 cambio en el pipeline
 
-3. Agregar un badge con el estado del pipeline
+3. Agregar un badge con el estado del pipeline...
