@@ -52,9 +52,7 @@ jobs:
           vulnerability-report.txt
     
     # 7. REQUISITO 4: Analizar código en busca de secretos expuestos
-    - name: Run TruffleHog
-      run: |
-        docker run --rm -v "${{ github.workspace }}:/workdir" \
-          -w /workdir \
-          trufflesecurity/trufflehog:latest \
-          filesystem /workdir --no-update
+    - name: Run GitLeaks
+      uses: gitleaks/gitleaks-action@v2
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
