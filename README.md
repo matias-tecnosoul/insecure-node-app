@@ -2,10 +2,10 @@
 <h1> Insecure Node app </h1>
 <!-- Badge del estado del pipeline -->
 <h2>Pipeline Badge</h2>
-![CI/CD Pipeline](https://github.com/matias-tecnosoul/insecure-node-app/workflows/CI%2FCD%20Pipeline/badge.svg)
 <br>
 
 </div>
+![CI/CD Pipeline](https://github.com/matias-tecnosoul/insecure-node-app/workflows/CI%2FCD%20Pipeline/badge.svg)
 
 Este proyecto contiene una aplicación backend hecha en Node.js con Express,
 intencionalmente insegura y mal estructurada.
