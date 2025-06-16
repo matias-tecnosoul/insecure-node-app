@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Checkout del código
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # 2. Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.16.x'
+        cache: 'npm'
+    
+    # 3. Instalar dependencias
+    - name: Install dependencies
+      run: npm ci
+    
+    # 4. REQUISITO 1: Ejecutar tests automatizados
+    - name: Run tests
+      run: npm test
+    
+    # 5. REQUISITO 2: Ejecutar linter
+    - name: Run linter
+      run: npm run lint
+    
+    # 6. REQUISITO 3: Analizar dependencias en busca de vulnerabilidades
+    - name: Run npm audit
+      run: npm audit
+    
+    # 7. REQUISITO 4: Analizar código en busca de secretos expuestos
+    - name: Run TruffleHog
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: main
+        head: HEAD
