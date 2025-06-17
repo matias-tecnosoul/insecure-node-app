@@ -3,6 +3,7 @@
 <!-- Badge del estado del pipeline -->
 <h2>Pipeline Status</h2>
 </div>
+![CI/CD Pipeline](https://github.com/matias-tecnosoul/insecure-node-app/workflows/CI%2FCD%20Pipeline/badge.svg)
 
 ![CI/CD](https://github.com/matias-tecnosoul/insecure-node-app/actions/workflows/ci.yml/badge.svg?branch=main)
 
