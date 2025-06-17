@@ -27,21 +27,28 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    # 4. REQUISITO 1: Ejecutar tests automatizados
+    # 4. REQUISITO 1: Ejecutar tests automatizados (CRÍTICO)
     - name: Run tests
-      run: npm test
+      run: npm test  # Sin || true - falla si hay errores
     
-    # 5. REQUISITO 2: Ejecutar linter
+    # 5. REQUISITO 2: Ejecutar linter (CRÍTICO)
     - name: Run linter
-      run: npm run lint
+      run: npm run lint  # Sin || true - falla si hay errores
     
-    # 6. REQUISITO 3: Analizar dependencias en busca de vulnerabilidades y generar reporte
+    # 6. REQUISITO 3: Analizar dependencias - Generar reportes
     - name: Generate vulnerability report
       run: |
         echo "🔍 Analizando vulnerabilidades..."
         npm audit --json > vulnerability-report.json || true
         npm audit > vulnerability-report.txt || true
         echo "✅ Reportes generados"
+
+    # 7. REQUISITO 3: Verificar vulnerabilidades (CRÍTICO)
+    - name: Check for vulnerabilities
+      run: |
+        echo "🚨 Verificando vulnerabilidades en modo estricto..."
+        npm audit  # Sin || true - falla si hay vulnerabilidades
+        echo "✅ No se encontraron vulnerabilidades críticas"
 
     - name: Upload vulnerability report
       uses: actions/upload-artifact@v4
@@ -52,8 +59,9 @@ jobs:
           vulnerability-report.json
           vulnerability-report.txt
     
-    # 7. REQUISITO 4: Analizar código en busca de secretos expuestos
+    # 8. REQUISITO 4: Analizar código en busca de secretos expuestos (CRÍTICO)
     - name: Run GitLeaks
       uses: gitleaks/gitleaks-action@v2
       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # GitLeaks Action por defecto falla el workflow si encuentra secretos
